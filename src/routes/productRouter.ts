@@ -1,21 +1,8 @@
-import {
-	createProduct,
-	deleteProduct,
-	getAllProducts,
-	getProductById,
-	getProductsByCategory,
-	updateProduct,
-} from '@controllers/ProductController';
+import { createProductController } from '@useCases/Product/CreateProduct';
 import { Router } from 'express';
 
 const router = Router();
 
-router.route('/').post(createProduct).get(getAllProducts);
-router
-	.route('/:id')
-	.get(getProductById)
-	.patch(updateProduct)
-	.delete(deleteProduct);
-router.route('/category/:category').get(getProductsByCategory);
+router.route('/').post((req, res) => createProductController.handle(req, res));
 
 export default router;

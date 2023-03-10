@@ -1,20 +1,17 @@
-import { create } from 'domain';
 import { Router } from 'express';
-import {
-	createCategory,
-	deleteCategory,
-	getAllCategories,
-	getCategoryById,
-	updateCategory,
-} from '@controllers/CategoryController';
+
+import { createCategoryController } from '@useCases/Category/CreateCategory';
+import { findCategoryByNameController } from '@useCases/Category/FindCategoryByName';
+import { deleteCategoryController } from '@useCases/Category/DeleteCategory';
 
 const router = Router();
 
-router.route('/').post(createCategory).get(getAllCategories);
+router.route('/').post((req, res) => createCategoryController.handle(req, res));
 router
 	.route('/:id')
-	.get(getCategoryById)
-	.delete(deleteCategory)
-	.patch(updateCategory);
+	.delete((req, res) => deleteCategoryController.handle(req, res));
+router
+	.route('/name/:name')
+	.get((req, res) => findCategoryByNameController.handle(req, res));
 
 export default router;

@@ -25,6 +25,18 @@
       ],
       "@middlewares/*": [
         "src/middlewares/*"
+      ],
+      "@entities/*": [
+        "src/entities/*"
+      ],
+      "@repositories/*": [
+        "src/repositories/*"
+      ],
+      "@implementations/*": [
+        "src/repositories/implementations/*"
+      ],
+      "@useCases/*": [
+        "src/useCases/*"
       ]
     }
   }
