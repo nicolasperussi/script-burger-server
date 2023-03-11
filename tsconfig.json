@@ -14,9 +14,6 @@
     "resolveJsonModule": true,
     "baseUrl": "./",
     "paths": {
-      "@controllers/*": [
-        "./src/controllers/*"
-      ],
       "@routes/*": [
         "./src/routes/*"
       ],
@@ -29,11 +26,11 @@
       "@entities/*": [
         "src/entities/*"
       ],
-      "@repositories/*": [
-        "src/repositories/*"
-      ],
       "@implementations/*": [
         "src/repositories/implementations/*"
+      ],
+      "@repositories/*": [
+        "src/repositories/*"
       ],
       "@useCases/*": [
         "src/useCases/*"

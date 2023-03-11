@@ -3,6 +3,12 @@ import { Category } from '@entities/Category';
 import { ICategoryRepository } from '@repositories/ICategoryRepository';
 
 export class PostgresCategoryRepository implements ICategoryRepository {
+	async findAll(): Promise<Category[]> {
+		const categories = await prisma.category.findMany();
+
+		return categories;
+	}
+
 	async findByName(name: string): Promise<Category | null> {
 		const category = await prisma.category.findFirst({
 			where: { name },
