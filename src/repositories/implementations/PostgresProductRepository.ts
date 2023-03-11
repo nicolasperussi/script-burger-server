@@ -5,12 +5,31 @@ import { IProductRepository } from '@repositories/IProductRepository';
 export class PostgresProductRepository implements IProductRepository {
 	async findAll(): Promise<Product[]> {
 		const products = await prisma.product.findMany({
-			include: {
+			select: {
+				id: true,
+				name: true,
+				description: true,
+				price: true,
 				category: true,
 			},
 		});
 
 		return products;
+	}
+
+	async findById(id: string): Promise<Product | null> {
+		const product = await prisma.product.findUnique({
+			where: { id },
+			select: {
+				id: true,
+				name: true,
+				description: true,
+				price: true,
+				category: true,
+			},
+		});
+
+		return product;
 	}
 
 	async findByCategory(categoryId: string): Promise<Product[]> {
@@ -42,6 +61,6 @@ export class PostgresProductRepository implements IProductRepository {
 	}
 
 	async delete(id: string): Promise<void> {
-		throw new Error('Method not yet implemented');
+		await prisma.product.delete({ where: { id } });
 	}
 }
