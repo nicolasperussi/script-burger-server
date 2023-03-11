@@ -4,10 +4,16 @@ import { IProductRepository } from '@repositories/IProductRepository';
 
 export class PostgresProductRepository implements IProductRepository {
 	async findAll(): Promise<Product[]> {
-		throw new Error('Method not yet implemented');
+		const products = await prisma.product.findMany({
+			include: {
+				category: true,
+			},
+		});
+
+		return products;
 	}
 
-	async findById(id: string): Promise<Product | null> {
+	async findByCategory(categoryId: string): Promise<Product | null> {
 		throw new Error('Method not yet implemented');
 	}
 
