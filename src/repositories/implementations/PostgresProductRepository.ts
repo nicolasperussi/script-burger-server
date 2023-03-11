@@ -13,8 +13,18 @@ export class PostgresProductRepository implements IProductRepository {
 		return products;
 	}
 
-	async findByCategory(categoryId: string): Promise<Product | null> {
-		throw new Error('Method not yet implemented');
+	async findByCategory(categoryId: string): Promise<Product[]> {
+		const products = await prisma.product.findMany({
+			where: { categoryId },
+			select: {
+				id: true,
+				name: true,
+				description: true,
+				price: true,
+			},
+		});
+
+		return products;
 	}
 
 	async save(product: Product): Promise<void> {

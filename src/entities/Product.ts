@@ -6,7 +6,7 @@ export class Product {
 	public name: string;
 	public description: string;
 	public price: number;
-	public categoryId: string;
+	public categoryId?: string;
 	public category?: Category;
 
 	constructor(props: Omit<Product, 'id'>, id?: string) {
