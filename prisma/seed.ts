@@ -55,6 +55,14 @@ const bootstrap = async () => {
 		},
 	});
 
+	const user = await prisma.user.create({
+		data: {
+			name: 'John Doe',
+			email: 'john.doe@gmail.com',
+			password: 'password',
+		},
+	});
+
 	const newOrder = await prisma.order.create({
 		data: {
 			productList: {
@@ -74,12 +82,18 @@ const bootstrap = async () => {
 				],
 			},
 			totalPrice: products[1].price * 1 + products[0].price * 2,
+			user: {
+				connect: {
+					id: user.id,
+				},
+			},
 		},
 		include: {
 			productList: {
 				select: {
 					product: {
 						select: {
+							id: true,
 							name: true,
 							price: true,
 						},
@@ -87,6 +101,7 @@ const bootstrap = async () => {
 					quantity: true,
 				},
 			},
+			user: true,
 		},
 	});
 
