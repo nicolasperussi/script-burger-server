@@ -5,6 +5,7 @@ import cors from 'cors';
 import categoryRouter from '@routes/categoryRouter';
 import productRouter from '@routes/productRouter';
 import orderRouter from '@routes/orderRouter';
+import userRouter from '@routes/userRouter';
 import logMiddleware from '@middlewares/log.middleware';
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(logMiddleware);
 app.use('/category', categoryRouter);
 app.use('/product', productRouter);
 app.use('/order', orderRouter);
+app.use('/user', userRouter);
 
 const PORT = process.env.PORT || 3002;
 

@@ -113,6 +113,7 @@ const bootstrap = async () => {
 const purge = async () => {
 	await prisma.orderProduct.deleteMany();
 	await prisma.order.deleteMany();
+	await prisma.user.deleteMany();
 	await prisma.category.deleteMany();
 	await prisma.product.deleteMany();
 };
