@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
 
 import categoryRouter from '@routes/categoryRouter';
 import productRouter from '@routes/productRouter';
@@ -13,6 +14,7 @@ const app = express();
 dotenv.config();
 
 app.use(express.json());
+app.use('/images', express.static(path.resolve(__dirname, '..', 'images')));
 app.use(cors());
 app.use(logMiddleware);
 

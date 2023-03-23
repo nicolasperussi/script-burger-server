@@ -27,12 +27,15 @@ model Address {
   number String
 
   users User[]
+  Order Order[]
 }
 
 model Product {
   id          String @id @default(uuid())
   name        String
+  slug        String
   description String
+  overview    String
   price       Float
 
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -55,6 +58,8 @@ model Order {
   totalPrice  Float
   user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
+  address     Address        @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId   String
 }
 
 model OrderProduct {

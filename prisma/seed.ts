@@ -1,113 +1,58 @@
+import { Order } from '@entities/Order';
+import { slugify } from 'src/utils/slugify';
 import { prisma } from '../src/database/db';
+import mockProducts from './products';
 
 const bootstrap = async () => {
 	// Purge all data from database
 	await purge();
 
-	// Creating three categories for the products
+	// Creating four categories for the products
 	await prisma.category.createMany({
-		data: [{ name: 'drinks' }, { name: 'sandwiches' }, { name: 'desserts' }],
+		data: [
+			{ name: 'drink' },
+			{ name: 'sandwich' },
+			{ name: 'side' },
+			{ name: 'dessert' },
+		],
 	});
 
-	const categories = await prisma.category.findMany();
+	await createProducts(mockProducts);
 
-	// Adding products to database
-	await prisma.product.create({
-		data: {
-			name: 'Full Steak',
-			price: 39.9,
-			description: 'Sanduiche com dois hamburgueres, alface, queijo e bacon',
-			category: {
-				connect: {
-					id: categories[1].id,
-				},
-			},
-		},
-	});
-	await prisma.product.create({
-		data: {
-			name: 'Coca-cola',
-			price: 6.9,
-			description: 'Refrigerante coca-cola',
-			category: {
-				connect: {
-					id: categories[0].id,
-				},
-			},
-		},
-	});
-	await prisma.product.create({
-		data: {
-			name: 'Pudim',
-			price: 12.9,
-			description: 'Sobremesa pudim de leite condensado',
-			category: {
-				connect: {
-					id: categories[2].id,
-				},
-			},
-		},
-	});
-
-	const products = await prisma.product.findMany({
-		include: {
-			category: true,
-		},
-	});
-
-	const user = await prisma.user.create({
+	const john = await prisma.user.create({
 		data: {
 			name: 'John Doe',
 			email: 'john.doe@gmail.com',
 			password: 'password',
-		},
-	});
-
-	const newOrder = await prisma.order.create({
-		data: {
-			productList: {
+			addresses: {
 				create: [
-					{
-						product: {
-							connect: { id: products[1].id },
-						},
-						quantity: 1,
-					},
-					{
-						product: {
-							connect: { id: products[0].id },
-						},
-						quantity: 2,
-					},
+					{ cep: '03924-260', street: 'Rua dos Quichuas', number: '32' },
 				],
 			},
-			totalPrice: products[1].price * 1 + products[0].price * 2,
-			user: {
-				connect: {
-					id: user.id,
-				},
-			},
-		},
-		include: {
-			productList: {
-				select: {
-					product: {
-						select: {
-							id: true,
-							name: true,
-							price: true,
-						},
-					},
-					quantity: true,
-				},
-			},
-			user: true,
 		},
 	});
-
-	console.debug('CATEGORIES', categories);
-	console.debug('PRODUCTS', products);
-	console.debug('NEW ORDER', JSON.stringify(newOrder));
+	const jane = await prisma.user.create({
+		data: {
+			name: 'Jane Doe',
+			email: 'jane.doe@gmail.com',
+			password: 'password',
+			addresses: {
+				create: [
+					{ cep: '03924-250', street: 'Rua Primeiro Sorriso', number: '270' },
+				],
+			},
+		},
+	});
+	const fulano = await prisma.user.create({
+		data: {
+			name: 'Fulano Detal',
+			email: 'fulano.detal@gmail.com',
+			password: 'password',
+			addresses: {
+				create: [{ cep: '03988-000', street: 'Av. Sapopemba', number: '8838' }],
+			},
+		},
+	});
 };
 
 const purge = async () => {
@@ -116,6 +61,33 @@ const purge = async () => {
 	await prisma.user.deleteMany();
 	await prisma.category.deleteMany();
 	await prisma.product.deleteMany();
+};
+
+const createProducts = async (products: any) => {
+	products.forEach(
+		async (product: {
+			name: any;
+			description: any;
+			overview: any;
+			price: any;
+			category: any;
+		}) => {
+			await prisma.product.create({
+				data: {
+					name: product.name,
+					description: product.description,
+					slug: slugify(product.name),
+					overview: product.overview,
+					price: product.price,
+					category: {
+						connect: {
+							name: product.category,
+						},
+					},
+				},
+			});
+		}
+	);
 };
 
 bootstrap();

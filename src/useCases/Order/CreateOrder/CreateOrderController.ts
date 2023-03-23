@@ -6,13 +6,14 @@ export class CreateOrderController {
 
 	async handle(request: Request, response: Response): Promise<Response> {
 		try {
-			const { status, userId, totalPrice, productList } = request.body;
+			const { status, userId, totalPrice, productList, address } = request.body;
 
 			await this.createOrderUseCase.execute({
 				status: status || 'WAITING',
 				userId,
 				totalPrice,
 				productList,
+				address,
 			});
 
 			return response.status(201).send();

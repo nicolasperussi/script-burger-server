@@ -6,6 +6,13 @@ export class PostgresOrderRepository implements IOrderRepository {
 	async findAll(): Promise<Order[]> {
 		const orders = await prisma.order.findMany({
 			include: {
+				user: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+				address: true,
 				productList: {
 					select: {
 						product: {
@@ -38,13 +45,16 @@ export class PostgresOrderRepository implements IOrderRepository {
 			};
 		});
 
-		console.log(productListCreator);
-
 		await prisma.order.create({
 			data: {
 				user: {
 					connect: {
 						id: order.userId,
+					},
+				},
+				address: {
+					connect: {
+						id: order.address.id,
 					},
 				},
 				totalPrice: order.totalPrice,

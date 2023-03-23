@@ -1,6 +1,7 @@
 import { prisma } from '@database/db';
 import { Product } from '@entities/Product';
 import { IProductRepository } from '@repositories/IProductRepository';
+import { slugify } from 'src/utils/slugify';
 
 export class PostgresProductRepository implements IProductRepository {
 	async findAll(): Promise<Product[]> {
@@ -8,7 +9,9 @@ export class PostgresProductRepository implements IProductRepository {
 			select: {
 				id: true,
 				name: true,
+				slug: true,
 				description: true,
+				overview: true,
 				price: true,
 				category: true,
 			},
@@ -23,7 +26,9 @@ export class PostgresProductRepository implements IProductRepository {
 			select: {
 				id: true,
 				name: true,
+				slug: true,
 				description: true,
+				overview: true,
 				price: true,
 				category: true,
 			},
@@ -38,7 +43,9 @@ export class PostgresProductRepository implements IProductRepository {
 			select: {
 				id: true,
 				name: true,
+				slug: true,
 				description: true,
+				overview: true,
 				price: true,
 			},
 		});
@@ -51,7 +58,9 @@ export class PostgresProductRepository implements IProductRepository {
 			data: {
 				id: product.id,
 				name: product.name,
+				slug: slugify(product.name),
 				description: product.description,
+				overview: product.overview,
 				price: product.price,
 				category: {
 					connect: { id: product.categoryId },
