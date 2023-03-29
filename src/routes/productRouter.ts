@@ -2,13 +2,14 @@ import { createProductController } from '@useCases/Product/CreateProduct';
 import { deleteProductController } from '@useCases/Product/DeleteProduct';
 import { findAllProductsController } from '@useCases/Product/FindAllProducts';
 import { findProductsByCategoryController } from '@useCases/Product/FindProductsByCategory';
+import validateProduct from '@validators/product';
 import { Router } from 'express';
 
 const router = Router();
 
 router
 	.route('/')
-	.post((req, res) => createProductController.handle(req, res))
+	.post(validateProduct, (req, res) => createProductController.handle(req, res))
 	.get((req, res) => findAllProductsController.handle(res));
 router
 	.route('/:id')

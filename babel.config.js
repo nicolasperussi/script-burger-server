@@ -22,6 +22,7 @@ module.exports = {
 					'@implementations': './src/repositories/implementations',
 					'@repositories': './src/repositories',
 					'@useCases': './src/useCases',
+					'@validators': './src/validators',
 				},
 			},
 		],

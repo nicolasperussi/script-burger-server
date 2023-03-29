@@ -5,7 +5,7 @@ export class DeleteOrderController {
 	constructor(private deleteOrderUseCase: DeleteOrderUseCase) {}
 
 	async handle(request: Request, response: Response): Promise<Response> {
-		const id = await request.params.id;
+		const id = request.params.id;
 
 		try {
 			await this.deleteOrderUseCase.execute({ id });

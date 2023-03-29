@@ -6,13 +6,6 @@ export class PostgresOrderRepository implements IOrderRepository {
 	async findAll(): Promise<Order[]> {
 		const orders = await prisma.order.findMany({
 			include: {
-				user: {
-					select: {
-						id: true,
-						name: true,
-					},
-				},
-				address: true,
 				productList: {
 					select: {
 						product: {
@@ -20,6 +13,7 @@ export class PostgresOrderRepository implements IOrderRepository {
 								id: true,
 								name: true,
 								price: true,
+								slug: true,
 							},
 						},
 						quantity: true,
@@ -29,10 +23,6 @@ export class PostgresOrderRepository implements IOrderRepository {
 		});
 
 		return orders;
-	}
-
-	async findByUser(userId: string): Promise<Order[] | null> {
-		throw new Error('Not yet implemented');
 	}
 
 	async save(order: Order): Promise<void> {
@@ -47,16 +37,7 @@ export class PostgresOrderRepository implements IOrderRepository {
 
 		await prisma.order.create({
 			data: {
-				user: {
-					connect: {
-						id: order.userId,
-					},
-				},
-				address: {
-					connect: {
-						id: order.address.id,
-					},
-				},
+				client: order.client,
 				totalPrice: order.totalPrice,
 				createdAt: order.createdAt,
 				status: order.status,

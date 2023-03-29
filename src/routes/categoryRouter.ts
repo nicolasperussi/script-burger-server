@@ -4,12 +4,15 @@ import { createCategoryController } from '@useCases/Category/CreateCategory';
 import { findCategoryByNameController } from '@useCases/Category/FindCategoryByName';
 import { deleteCategoryController } from '@useCases/Category/DeleteCategory';
 import { findAllCategoriesController } from '@useCases/Category/FindAllCategories';
+import validateCategory from '@validators/category';
 
 const router = Router();
 
 router
 	.route('/')
-	.post((req, res) => createCategoryController.handle(req, res))
+	.post(validateCategory, (req, res) =>
+		createCategoryController.handle(req, res)
+	)
 	.get((req, res) => findAllCategoriesController.handle(res));
 router
 	.route('/:id')

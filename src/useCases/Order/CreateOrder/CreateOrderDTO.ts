@@ -1,12 +1,11 @@
-type OrderStatus = 'WAITING' | 'IN_PRODUCTION' | 'IN_TRANSIT' | 'DELIVERED';
+type OrderStatus = 'WAITING' | 'IN_PRODUCTION' | 'DONE';
 
 export interface ICreateOrderRequestDTO {
 	status: OrderStatus;
 	totalPrice: number;
-	userId: string;
-	address: { id?: string; cep: string; street: string; number: string };
+	client: string;
 	productList: {
-		product: { id: string };
+		product: { id: string; name?: string; price?: number; slug?: string };
 		quantity: number;
 	}[];
 }

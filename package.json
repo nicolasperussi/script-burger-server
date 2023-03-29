@@ -7,7 +7,8 @@
     "build": "rimraf ./dist && babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "npm run build && node dist/index.js",
     "seed": "nodemon prisma/seed.ts",
-    "clean": "rimraf ./dist"
+    "clean": "rimraf ./dist",
+    "studio": "prisma studio --port 443"
   },
   "keywords": [],
   "author": "",
