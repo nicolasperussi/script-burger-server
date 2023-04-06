@@ -51,4 +51,11 @@ export class PostgresOrderRepository implements IOrderRepository {
 	async delete(id: string): Promise<void> {
 		await prisma.order.delete({ where: { id } });
 	}
+
+	async nextStep(
+		id: string,
+		status: 'WAITING' | 'IN_PRODUCTION' | 'DONE'
+	): Promise<void> {
+		await prisma.order.update({ where: { id }, data: { status } });
+	}
 }
