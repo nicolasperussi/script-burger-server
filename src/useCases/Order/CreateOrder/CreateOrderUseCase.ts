@@ -8,6 +8,6 @@ export class CreateOrderUseCase {
 	async execute(data: ICreateOrderRequestDTO) {
 		const newOrder = new Order(data);
 
-		await this.orderRepository.save(newOrder);
+		return await this.orderRepository.save(newOrder);
 	}
 }

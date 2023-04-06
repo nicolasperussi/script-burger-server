@@ -25,7 +25,7 @@ export class PostgresOrderRepository implements IOrderRepository {
 		return orders;
 	}
 
-	async save(order: Order): Promise<void> {
+	async save(order: Order): Promise<Order> {
 		const productListCreator = order.productList.map((product) => {
 			return {
 				product: {
@@ -35,7 +35,7 @@ export class PostgresOrderRepository implements IOrderRepository {
 			};
 		});
 
-		await prisma.order.create({
+		const newOrder = await prisma.order.create({
 			data: {
 				client: order.client,
 				totalPrice: order.totalPrice,
@@ -45,7 +45,24 @@ export class PostgresOrderRepository implements IOrderRepository {
 					create: productListCreator,
 				},
 			},
+			include: {
+				productList: {
+					select: {
+						product: {
+							select: {
+								id: true,
+								name: true,
+								price: true,
+								slug: true,
+							},
+						},
+						quantity: true,
+					},
+				},
+			},
 		});
+
+		return newOrder;
 	}
 
 	async delete(id: string): Promise<void> {

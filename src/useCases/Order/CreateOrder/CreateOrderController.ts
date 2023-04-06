@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateOrderUseCase } from './CreateOrderUseCase';
+import { io } from 'src';
 
 export class CreateOrderController {
 	constructor(private createOrderUseCase: CreateOrderUseCase) {}
@@ -8,13 +9,14 @@ export class CreateOrderController {
 		try {
 			const { status, client, totalPrice, productList } = request.body;
 
-			await this.createOrderUseCase.execute({
+			const order = await this.createOrderUseCase.execute({
 				status: status || 'WAITING',
 				totalPrice,
 				productList,
 				client,
 			});
 
+			io.emit('order@new', order);
 			return response.status(201).send();
 		} catch (err: any) {
 			return response

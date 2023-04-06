@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
+import http from 'http';
 
 import categoryRouter from '@routes/categoryRouter';
 import productRouter from '@routes/productRouter';
@@ -9,8 +10,11 @@ import orderRouter from '@routes/orderRouter';
 import deliveryRouter from '@routes/deliveryRouter';
 import userRouter from '@routes/userRouter';
 import logMiddleware from '@middlewares/log.middleware';
+import { Server } from 'socket.io';
 
 const app = express();
+const server = http.createServer(app);
+export const io = new Server(server);
 
 dotenv.config();
 
@@ -27,7 +31,7 @@ app.use('/user', userRouter);
 
 const PORT = process.env.PORT || 3002;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
 	console.clear();
 	// console.log(`🚀 Server running on port ${PORT}`);
 	console.log(
