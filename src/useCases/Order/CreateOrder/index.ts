@@ -1,11 +1,20 @@
-import { PostgresOrderRepository } from '@implementations/PostgresOrderRepository';
-import { CreateOrderController } from './CreateOrderController';
-import { CreateOrderUseCase } from './CreateOrderUseCase';
+import { PostgresOrderRepository } from "@implementations/PostgresOrderRepository";
+import { CreateOrderController } from "./CreateOrderController";
+import { CreateDineInOrderUseCase } from "./CreateDineInOrderUseCase";
+import { CreateDeliveryOrderUseCase } from "./CreateDeliveryOrderUseCase";
 
 const postgresOrderRepository = new PostgresOrderRepository();
 
-const createOrderUseCase = new CreateOrderUseCase(postgresOrderRepository);
+const createDineInOrderUseCase = new CreateDineInOrderUseCase(
+  postgresOrderRepository
+);
+const createDeliveryOrderUseCase = new CreateDeliveryOrderUseCase(
+  postgresOrderRepository
+);
 
-const createOrderController = new CreateOrderController(createOrderUseCase);
+const createOrderController = new CreateOrderController(
+  createDineInOrderUseCase,
+  createDeliveryOrderUseCase
+);
 
-export { createOrderUseCase, createOrderController };
+export { createDineInOrderUseCase, createOrderController };

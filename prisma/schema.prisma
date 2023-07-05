@@ -16,8 +16,8 @@ model User {
   email    String @unique
   password String
 
-  addresses  Address[]
-  deliveries Delivery[]
+  orders    Order[]
+  addresses Address[]
 }
 
 model Address {
@@ -26,8 +26,8 @@ model Address {
   street String
   number String
 
-  users      User[]
-  deliveries Delivery[]
+  users  User[]
+  orders Order[]
 }
 
 model Product {
@@ -56,21 +56,13 @@ model Order {
   createdAt   DateTime       @default(now())
   productList OrderProduct[]
   totalPrice  Float
+  type        OrderType      @default(DINE_IN)
 
-  client String
-}
-
-model Delivery {
-  id          String         @id @default(uuid())
-  status      DeliveryStatus @default(WAITING)
-  createdAt   DateTime       @default(now())
-  productList OrderProduct[]
-  totalPrice  Float
-
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  addressId String
+  client    String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId String?
 }
 
 model OrderProduct {
@@ -81,10 +73,8 @@ model OrderProduct {
 
   quantity Int @default(1)
 
-  Order      Order?    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId    String?
-  Delivery   Delivery? @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
-  deliveryId String?
+  Order   Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String?
 }
 
 enum OrderType {
@@ -92,15 +82,9 @@ enum OrderType {
   DELIVERY
 }
 
-enum DeliveryStatus {
-  WAITING
-  IN_PRODUCTION
-  IN_TRANSIT
-  DELIVERED
-}
-
 enum OrderStatus {
   WAITING
   IN_PRODUCTION
+  IN_TRANSIT
   DONE
 }
