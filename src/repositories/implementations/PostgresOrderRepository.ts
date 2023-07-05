@@ -10,6 +10,7 @@ export class PostgresOrderRepository implements IOrderRepository {
         createdAt: true,
         totalPrice: true,
         client: true,
+        status: true,
         productList: {
           select: {
             product: {
