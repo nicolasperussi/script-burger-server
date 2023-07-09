@@ -8,7 +8,8 @@ export class AuthController {
 		try {
 			const { email, password } = request.body;
 			const user = await this.authUseCase.execute({ email, password });
-			return response.status(200).json(user);
+      const token = await this.authUseCase.generateToken(user.id);
+			return response.status(200).json({...user, token});
 		} catch (err: any) {
 			return response
 				.status(400)
