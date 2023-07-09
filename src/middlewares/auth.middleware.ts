@@ -6,7 +6,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const jwtKey = process.env.JWT_KEY as string;
 
   if (!req.headers.authorization)
-    return res.status(401).send('Access denied. No token provided.');
+    return res.status(401).send('Access denied. No token was provided.');
 
   const [parts, token] = req.headers.authorization!!.split(' ');
 
