@@ -3,7 +3,7 @@ package com.nicolasperussi.scriptburger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.nicolasperussi.scriptburger")
 public class ScriptburgerApplication {
 
 	public static void main(String[] args) {
