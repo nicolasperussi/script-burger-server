@@ -9,20 +9,20 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 public class RegisterDTO {
-    @NotBlank(message = "O usuário deve ter um nome")
+    @NotBlank(message = "The user must have a name")
     private String name;
 
-    @NotBlank(message = "O usuário deve ter um e-mail")
-    @Email(message = "O e-mail deve ser válido")
+    @NotBlank(message = "The user must have an e-mail")
+    @Email(message = "The e-mail must be a valid e-mail address")
     private String email;
 
-    @NotBlank(message = "O usuário deve ter um número de telefone")
+    @NotBlank(message = "The user must have a phone number")
     private String phone;
 
-    @NotBlank(message = "O usuário deve ter uma senha")
+    @NotBlank(message = "The user must have a password")
     private String password;
 
-    @NotEmpty(message = "O usuário deve ter pelo menos um endereço cadastrado")
+    @NotEmpty(message = "The user must have at least one address")
     private List<Address> addresses;
 
     public String getName() {

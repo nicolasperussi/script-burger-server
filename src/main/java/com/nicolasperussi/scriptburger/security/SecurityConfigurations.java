@@ -31,7 +31,7 @@ public class SecurityConfigurations {
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/products/new/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
             .requestMatchers(toH2Console()).permitAll()
             .anyRequest().authenticated())
         .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
