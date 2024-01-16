@@ -1,5 +1,6 @@
 package com.nicolasperussi.scriptburger.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class User implements UserDetails {
   @ElementCollection
   private List<Address> addresses;
   private UserRole role;
+
+  @OneToMany(mappedBy = "client")
+  private List<Order> orders = new ArrayList<>();
 
   public User() {
   }
