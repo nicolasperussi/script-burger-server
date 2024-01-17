@@ -1,6 +1,7 @@
 package com.nicolasperussi.scriptburger.domain.enums;
 
 public enum OrderStatus {
+  CANCELED(0),
   WAITING(1),
   IN_PRODUCTION(2),
   IN_TRANSIT(3),

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -77,5 +78,15 @@ public class OrderController {
     }
 
     return ResponseEntity.status(201).build();
+  }
+
+  @PatchMapping(value = "/{orderId}")
+  public ResponseEntity<Order> nextOrderStep(@PathVariable Long orderId) {
+    return ResponseEntity.ok().body(service.nextOrderStatus(orderId));
+  }
+
+  @PatchMapping(value = "/cancel/{orderId}")
+  public ResponseEntity<Order> cancel(@PathVariable Long orderId) {
+    return ResponseEntity.ok().body(service.cancelOrder(orderId));
   }
 }

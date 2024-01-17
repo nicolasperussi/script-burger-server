@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.nicolasperussi.scriptburger.domain.Order;
 import com.nicolasperussi.scriptburger.domain.dtos.OrderByUserDTO;
+import com.nicolasperussi.scriptburger.domain.enums.OrderStatus;
 import com.nicolasperussi.scriptburger.exceptions.ResourceNotFoundException;
 import com.nicolasperussi.scriptburger.repositories.OrderRepository;
 
@@ -36,6 +37,32 @@ public class OrderService {
 
   public void delete(Long id) {
     repository.deleteById(id);
+  }
+
+  public Order nextOrderStatus(Long orderId) {
+    Order order = this.findById(orderId);
+
+    if (order.getStatus().getCode() == 0 || order.getStatus().getCode() == 4) {
+      return order;
+    }
+
+    order.setStatus(OrderStatus.valueOf(order.getStatus().getCode() + 1));
+    repository.save(order);
+
+    return order;
+  }
+
+  public Order cancelOrder(Long orderId) {
+    Order order = this.findById(orderId);
+
+    if (order.getStatus().getCode() == 0 || order.getStatus().getCode() == 4) {
+      return order;
+    }
+
+    order.setStatus(OrderStatus.valueOf(0));
+    repository.save(order);
+
+    return order;
   }
 
   private OrderByUserDTO convertToOrderByUserDTO(Order order) {
