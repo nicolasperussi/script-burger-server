@@ -1,5 +1,7 @@
 package com.nicolasperussi.scriptburger.domain.dtos;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.nicolasperussi.scriptburger.domain.enums.Category;
 
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +24,9 @@ public class ProductDTO {
 
   @NotNull(message = "The product must have a category")
   private Category category;
+
+  @NotNull(message = "The product must have an image")
+  private MultipartFile image;
 
   public String getName() {
     return name;
@@ -61,6 +66,14 @@ public class ProductDTO {
 
   public void setCategory(Category category) {
     this.category = category;
+  }
+
+  public MultipartFile getImage() {
+    return image;
+  }
+
+  public void setImage(MultipartFile image) {
+    this.image = image;
   }
 
 }
