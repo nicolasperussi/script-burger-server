@@ -31,7 +31,7 @@ public class User implements UserDetails {
   private List<Address> addresses;
   private UserRole role;
 
-  @OneToMany(mappedBy = "client")
+  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Order> orders = new ArrayList<>();
 
   public User() {
