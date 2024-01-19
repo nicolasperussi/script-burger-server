@@ -67,7 +67,7 @@ These are the available endpoints in this API:
 
 **REQUEST**
 
-```json
+```jsonc
 {
   "name": "John Doe",
   "email": "johndoe@gmail.com",
@@ -87,7 +87,7 @@ These are the available endpoints in this API:
 
 **REQUEST**
 
-```json
+```jsonc
 {
   "email": "johndoe@gmail.com",
   "password": "test1234"
@@ -96,7 +96,7 @@ These are the available endpoints in this API:
 
 **RESPONSE**
 
-```json
+```jsonc
 {
   // This is a JWT token signed with the
   // secret you provided on the .env file
@@ -125,7 +125,7 @@ These are the available endpoints in this API:
 
 **RESPONSE**
 
-```json
+```jsonc
 [
   {
     "id": 1,
@@ -142,7 +142,7 @@ These are the available endpoints in this API:
 
 <h3 id="get-product-by-id-detail">GET /products/7</h3>
 
-```json
+```jsonc
 {
   "id": 7,
   "name": "PHP Bacon Cheeseburger",
@@ -186,7 +186,7 @@ image: file;
 <details>
   <summary>Click here to show</summary>
 
-```json
+```jsonc
 [
   {
     "id": 1,
@@ -233,7 +233,7 @@ image: file;
 <details>
   <summary>Click here to show</summary>
 
-```json
+```jsonc
 [
   {
     "id": 1,
@@ -266,7 +266,7 @@ image: file;
 
 **REQUEST**
 
-```json
+```jsonc
 {
   "userId": 1,
   "items": [
@@ -293,7 +293,7 @@ image: file;
 <details>
   <summary>Click here to show</summary>
 
-```json
+```jsonc
 {
   "id": 1,
   "moment": "2024-01-19T03:22:18Z",
@@ -335,7 +335,7 @@ image: file;
 <details>
   <summary>Click here to show</summary>
 
-```json
+```jsonc
 {
   "id": 1,
   "moment": "2024-01-19T03:22:18Z",
