@@ -55,8 +55,9 @@ public class Seeding implements CommandLineRunner {
     List<Address> addresses = new ArrayList<Address>();
     addresses.add(defaultAddress);
 
-    User newUser = new User("Administrator", "admin@admin.com", "999999999", encryptedPassword, addresses);
+    User newUser = new User("Administrator", "admin@admin.com", "999999999", encryptedPassword);
     newUser.setRole(UserRole.ADMIN);
+    newUser.addAddress(defaultAddress);
     this.userRepository.save(newUser);
   }
 

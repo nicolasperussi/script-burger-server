@@ -1,12 +1,7 @@
 package com.nicolasperussi.scriptburger.domain.dtos;
 
-import java.util.List;
-
-import com.nicolasperussi.scriptburger.domain.Address;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 public class RegisterDTO {
     @NotBlank(message = "The user must have a name")
@@ -21,9 +16,6 @@ public class RegisterDTO {
 
     @NotBlank(message = "The user must have a password")
     private String password;
-
-    @NotEmpty(message = "The user must have at least one address")
-    private List<Address> addresses;
 
     public String getName() {
         return name;
@@ -56,13 +48,4 @@ public class RegisterDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
-
 }

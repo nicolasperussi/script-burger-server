@@ -51,7 +51,7 @@ public class AuthController {
       throw new DatabaseException("This e-mail is already in use");
 
     String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
-    User newUser = new User(data.getName(), data.getEmail(), data.getPhone(), encryptedPassword, data.getAddresses());
+    User newUser = new User(data.getName(), data.getEmail(), data.getPhone(), encryptedPassword);
 
     this.repository.save(newUser);
 
