@@ -72,14 +72,7 @@ These are the available endpoints in this API:
   "name": "John Doe",
   "email": "johndoe@gmail.com",
   "password": "test1234",
-  "phone": "999999999",
-  "addresses": [
-    {
-      "cep": "01001-000",
-      "street": "Praça da Sé",
-      "number": "0"
-    }
-  ]
+  "phone": "999999999"
 }
 ```
 

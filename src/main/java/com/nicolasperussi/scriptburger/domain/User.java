@@ -28,7 +28,7 @@ public class User implements UserDetails {
   private String phone;
   private String password;
   @ElementCollection
-  private List<Address> addresses;
+  private List<Address> addresses = new ArrayList<>();
   private UserRole role;
 
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,12 +37,11 @@ public class User implements UserDetails {
   public User() {
   }
 
-  public User(String name, String email, String phone, String password, List<Address> addresses) {
+  public User(String name, String email, String phone, String password) {
     this.name = name;
     this.email = email;
     this.phone = phone;
     this.password = password;
-    this.addresses = addresses;
     this.role = UserRole.CLIENT;
   }
 
@@ -100,12 +99,12 @@ public class User implements UserDetails {
     this.password = password;
   }
 
-  public List<Address> getAddress() {
+  public List<Address> getAddresses() {
     return addresses;
   }
 
-  public void setAddress(List<Address> addresses) {
-    this.addresses = addresses;
+  public void addAddress(Address address) {
+    this.getAddresses().add(address);
   }
 
   public UserRole getRole() {
