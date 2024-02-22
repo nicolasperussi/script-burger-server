@@ -19,6 +19,8 @@ import com.nicolasperussi.scriptburger.repositories.UserRepository;
 import com.nicolasperussi.scriptburger.services.ProductService;
 import com.nicolasperussi.scriptburger.utils.Slugify;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 @Configuration
 public class Seeding implements CommandLineRunner {
   @Autowired
@@ -50,7 +52,10 @@ public class Seeding implements CommandLineRunner {
   }
 
   private void createAdminUser() {
-    String encryptedPassword = new BCryptPasswordEncoder().encode("admin");
+    Dotenv dotenv = null;
+    dotenv = Dotenv.configure().load();
+
+    String encryptedPassword = new BCryptPasswordEncoder().encode(dotenv.get("ADMIN_KEY"));
     Address defaultAddress = new Address("01001-000", "Praça da Sé", "0");
     List<Address> addresses = new ArrayList<Address>();
     addresses.add(defaultAddress);
