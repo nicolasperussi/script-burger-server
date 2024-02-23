@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nicolasperussi.scriptburger.domain.Client;
 import com.nicolasperussi.scriptburger.domain.Order;
 import com.nicolasperussi.scriptburger.domain.OrderItem;
 import com.nicolasperussi.scriptburger.domain.Product;
-import com.nicolasperussi.scriptburger.domain.User;
 import com.nicolasperussi.scriptburger.domain.dtos.OrderByUserDTO;
 import com.nicolasperussi.scriptburger.domain.dtos.OrderDTO;
 import com.nicolasperussi.scriptburger.domain.dtos.OrderItemDTO;
@@ -67,8 +67,8 @@ public class OrderController {
     Order newOrder = new Order();
     newOrder.setMoment(Instant.now());
     newOrder.setStatus(OrderStatus.WAITING);
-    User user = userService.findById(order.getUserId());
-    newOrder.setClient(user);
+    Client client = (Client) userService.findById(order.getUserId());
+    newOrder.setClient(client);
     service.create(newOrder);
 
     for (OrderItemDTO item : order.getItems()) {
@@ -88,5 +88,10 @@ public class OrderController {
   @PatchMapping(value = "/cancel/{orderId}")
   public ResponseEntity<Order> cancel(@PathVariable Long orderId) {
     return ResponseEntity.ok().body(service.cancelOrder(orderId));
+  }
+
+  @PatchMapping(value = "/{orderId}/courier/{courierId}")
+  public ResponseEntity<Order> assignCourier(@PathVariable Long orderId, @PathVariable Long courierId) {
+    return ResponseEntity.ok().body(service.assignCourier(orderId, courierId));
   }
 }

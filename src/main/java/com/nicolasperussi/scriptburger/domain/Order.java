@@ -32,7 +32,12 @@ public class Order implements Serializable {
   @ManyToOne
   @JoinColumn(name = "client_id")
   @JsonIgnoreProperties("orders")
-  private User client;
+  private Client client;
+
+  @ManyToOne
+  @JoinColumn(name = "courier_id")
+  @JsonIgnoreProperties("orders")
+  private Courier courier;
 
   @OneToMany(mappedBy = "id.order")
   private Set<OrderItem> items = new HashSet<>();
@@ -40,7 +45,7 @@ public class Order implements Serializable {
   public Order() {
   }
 
-  public Order(Instant moment, OrderStatus status, User client) {
+  public Order(Instant moment, OrderStatus status, Client client) {
     this.moment = moment;
     setStatus(status);
     this.client = client;
@@ -72,12 +77,20 @@ public class Order implements Serializable {
     }
   }
 
-  public User getClient() {
+  public Client getClient() {
     return client;
   }
 
-  public void setClient(User client) {
+  public void setClient(Client client) {
     this.client = client;
+  }
+
+  public Courier getCourier() {
+    return courier;
+  }
+
+  public void setCourier(Courier courier) {
+    this.courier = courier;
   }
 
   public Set<OrderItem> getItems() {

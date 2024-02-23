@@ -3,6 +3,7 @@ package com.nicolasperussi.scriptburger.config;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nicolasperussi.scriptburger.domain.Address;
+import com.nicolasperussi.scriptburger.domain.Admin;
+import com.nicolasperussi.scriptburger.domain.Client;
+import com.nicolasperussi.scriptburger.domain.Courier;
 import com.nicolasperussi.scriptburger.domain.Product;
-import com.nicolasperussi.scriptburger.domain.User;
-import com.nicolasperussi.scriptburger.domain.enums.UserRole;
 import com.nicolasperussi.scriptburger.repositories.UserRepository;
 import com.nicolasperussi.scriptburger.services.ProductService;
 import com.nicolasperussi.scriptburger.utils.Slugify;
@@ -32,7 +34,7 @@ public class Seeding implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     populateProducts();
-    createAdminUser();
+    createDefaultUsers();
   }
 
   private void populateProducts() {
@@ -51,7 +53,7 @@ public class Seeding implements CommandLineRunner {
     }
   }
 
-  private void createAdminUser() {
+  private void createDefaultUsers() {
     Dotenv dotenv = null;
     dotenv = Dotenv.configure().load();
 
@@ -60,10 +62,18 @@ public class Seeding implements CommandLineRunner {
     List<Address> addresses = new ArrayList<Address>();
     addresses.add(defaultAddress);
 
-    User newUser = new User("Administrator", "admin@admin.com", "999999999", encryptedPassword);
-    newUser.setRole(UserRole.ADMIN);
-    newUser.addAddress(defaultAddress);
-    this.userRepository.save(newUser);
+    // Create Admin user
+    Admin newAdmin = new Admin("Administrator", "admin@admin.com", "999999999", encryptedPassword);
+
+    // Create Client user
+    Client newClient = new Client("Nicolas Perussi", "client@client.com", "999999999", encryptedPassword);
+    newClient.addAddress(defaultAddress);
+
+    // Create Courier user
+    Courier newCourier = new Courier("Elizeu Antunes", "courier@courier.com", "999999999", encryptedPassword, "EUS8753");
+
+    // Save admin, client and courier
+    this.userRepository.saveAll(Arrays.asList(newAdmin, newClient, newCourier));
   }
 
 }

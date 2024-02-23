@@ -3,18 +3,18 @@ package com.nicolasperussi.scriptburger.domain.dtos;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class RegisterDTO {
-    @NotBlank(message = "The user must have a name")
+public class RegisterAdminDTO {
+    @NotBlank(message = "The admin must have a name")
     private String name;
 
-    @NotBlank(message = "The user must have an e-mail")
+    @NotBlank(message = "The admin must have an e-mail")
     @Email(message = "The e-mail must be a valid e-mail address")
     private String email;
 
-    @NotBlank(message = "The user must have a phone number")
+    @NotBlank(message = "The admin must have a phone number")
     private String phone;
 
-    @NotBlank(message = "The user must have a password")
+    @NotBlank(message = "The admin must have a password")
     private String password;
 
     public String getName() {

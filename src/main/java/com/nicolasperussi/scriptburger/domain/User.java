@@ -9,12 +9,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.nicolasperussi.scriptburger.domain.enums.UserRole;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_user")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @JsonIgnoreProperties({ "password", "enabled", "credentialsNonExpired", "accountNonExpired", "accountNonLocked",
     "authorities" })
 public class User implements UserDetails {
@@ -27,9 +27,6 @@ public class User implements UserDetails {
   private String email;
   private String phone;
   private String password;
-  @ElementCollection
-  private List<Address> addresses = new ArrayList<>();
-  private UserRole role;
 
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Order> orders = new ArrayList<>();
@@ -42,15 +39,11 @@ public class User implements UserDetails {
     this.email = email;
     this.phone = phone;
     this.password = password;
-    this.role = UserRole.CLIENT;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    if (this.role == UserRole.ADMIN)
-      return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-    else
-      return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    return List.of(new SimpleGrantedAuthority("ROLE_USER"));
   }
 
   @Override
@@ -97,22 +90,6 @@ public class User implements UserDetails {
 
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  public List<Address> getAddresses() {
-    return addresses;
-  }
-
-  public void addAddress(Address address) {
-    this.getAddresses().add(address);
-  }
-
-  public UserRole getRole() {
-    return role;
-  }
-
-  public void setRole(UserRole role) {
-    this.role = role;
   }
 
   @Override

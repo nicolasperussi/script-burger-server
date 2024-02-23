@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nicolasperussi.scriptburger.domain.Courier;
 import com.nicolasperussi.scriptburger.domain.Order;
 import com.nicolasperussi.scriptburger.domain.dtos.OrderByUserDTO;
 import com.nicolasperussi.scriptburger.domain.enums.OrderStatus;
@@ -16,6 +17,9 @@ import com.nicolasperussi.scriptburger.repositories.OrderRepository;
 public class OrderService {
   @Autowired
   private OrderRepository repository;
+
+  @Autowired
+  private UserService userService;
 
   public List<Order> findAll() {
     return repository.findAll();
@@ -60,6 +64,16 @@ public class OrderService {
     }
 
     order.setStatus(OrderStatus.valueOf(0));
+    repository.save(order);
+
+    return order;
+  }
+
+  public Order assignCourier(Long orderId, Long courierId) {
+    Order order = this.findById(orderId);
+    Courier courier = (Courier) userService.findById(courierId);
+
+    order.setCourier(courier);
     repository.save(order);
 
     return order;

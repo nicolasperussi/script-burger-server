@@ -12,10 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nicolasperussi.scriptburger.domain.Admin;
+import com.nicolasperussi.scriptburger.domain.Client;
+import com.nicolasperussi.scriptburger.domain.Courier;
 import com.nicolasperussi.scriptburger.domain.User;
 import com.nicolasperussi.scriptburger.domain.dtos.LoginDTO;
 import com.nicolasperussi.scriptburger.domain.dtos.LoginResponseDTO;
-import com.nicolasperussi.scriptburger.domain.dtos.RegisterDTO;
+import com.nicolasperussi.scriptburger.domain.dtos.RegisterAdminDTO;
+import com.nicolasperussi.scriptburger.domain.dtos.RegisterClientDTO;
+import com.nicolasperussi.scriptburger.domain.dtos.RegisterCourierDTO;
 import com.nicolasperussi.scriptburger.exceptions.DatabaseException;
 import com.nicolasperussi.scriptburger.repositories.UserRepository;
 import com.nicolasperussi.scriptburger.security.TokenService;
@@ -45,15 +50,41 @@ public class AuthController {
     return ResponseEntity.ok((new LoginResponseDTO(token, user)));
   }
 
-  @PostMapping("/register")
-  public ResponseEntity<Void> register(@Valid @RequestBody RegisterDTO data) {
+  @PostMapping("/register/client")
+  public ResponseEntity<Void> registerClient(@Valid @RequestBody RegisterClientDTO data) {
     if (this.repository.findByEmail(data.getEmail()) != null)
       throw new DatabaseException("This e-mail is already in use");
 
     String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
-    User newUser = new User(data.getName(), data.getEmail(), data.getPhone(), encryptedPassword);
+    Client newClient = new Client(data.getName(), data.getEmail(), data.getPhone(), encryptedPassword);
 
-    this.repository.save(newUser);
+    this.repository.save(newClient);
+
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/register/admin")
+  public ResponseEntity<Void> registerAdmin(@Valid @RequestBody RegisterAdminDTO data) {
+    if (this.repository.findByEmail(data.getEmail()) != null)
+      throw new DatabaseException("This e-mail is already in use");
+
+    String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
+    Admin newAdmin = new Admin(data.getName(), data.getEmail(), data.getPhone(), encryptedPassword);
+
+    this.repository.save(newAdmin);
+
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/register/courier")
+  public ResponseEntity<Void> registerCourier(@Valid @RequestBody RegisterCourierDTO data) {
+    if (this.repository.findByEmail(data.getEmail()) != null)
+      throw new DatabaseException("This e-mail is already in use");
+
+    String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
+    Courier newCourier = new Courier(data.getName(), data.getEmail(), data.getPhone(), encryptedPassword, data.getLicensePlate());
+
+    this.repository.save(newCourier);
 
     return ResponseEntity.ok().build();
   }
