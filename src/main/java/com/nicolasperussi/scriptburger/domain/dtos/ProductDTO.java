@@ -1,5 +1,7 @@
 package com.nicolasperussi.scriptburger.domain.dtos;
 
+import java.math.BigDecimal;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nicolasperussi.scriptburger.domain.enums.Category;
@@ -20,7 +22,7 @@ public class ProductDTO {
 
   @NotNull(message = "The product must have a price")
   @Positive(message = "The price must be greater than zero")
-  private double price;
+  private BigDecimal price;
 
   @NotNull(message = "The product must have a category")
   private Category category;
@@ -40,7 +42,7 @@ public class ProductDTO {
     return overview;
   }
 
-  public double getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
@@ -60,7 +62,7 @@ public class ProductDTO {
     this.overview = overview;
   }
 
-  public void setPrice(double price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 

@@ -1,5 +1,6 @@
 package com.nicolasperussi.scriptburger.domain.dtos;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +46,17 @@ public class OrderByUserDTO {
 
   public void setItems(Set<OrderItem> items) {
     this.items = items;
+  }
+
+  public BigDecimal getTotalPrice() {
+    BigDecimal totalPrice = new BigDecimal(0);
+
+    for (OrderItem item : this.getItems()) {
+      totalPrice = totalPrice.add(item.getTotalPrice());
+      System.out.println(totalPrice);
+    }
+
+    return totalPrice;
   }
 
 }

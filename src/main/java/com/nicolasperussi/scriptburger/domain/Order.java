@@ -1,6 +1,7 @@
 package com.nicolasperussi.scriptburger.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -102,10 +103,11 @@ public class Order implements Serializable {
     this.getItems().add(item);
   }
 
-  public double getTotalPrice() {
-    double totalPrice = 0;
+  public BigDecimal getTotalPrice() {
+    BigDecimal totalPrice = new BigDecimal(0);
+
     for (OrderItem item : this.getItems()) {
-      totalPrice += item.getTotalPrice();
+      totalPrice = totalPrice.add(item.getTotalPrice());
     }
 
     return totalPrice;

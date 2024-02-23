@@ -1,5 +1,7 @@
 package com.nicolasperussi.scriptburger.domain;
 
+import java.math.BigDecimal;
+
 import com.nicolasperussi.scriptburger.domain.enums.Category;
 
 import jakarta.persistence.Entity;
@@ -20,13 +22,13 @@ public class Product {
   private String description;
   private String slug;
   private String overview;
-  private double price;
+  private BigDecimal price;
   private Category category;
 
   public Product() {
   }
 
-  public Product(String name, String description, String slug, String overview, double price, Category category) {
+  public Product(String name, String description, String slug, String overview, BigDecimal price, Category category) {
     this.name = name;
     this.description = description;
     this.slug = slug;
@@ -55,7 +57,7 @@ public class Product {
     return overview;
   }
 
-  public double getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
@@ -83,7 +85,7 @@ public class Product {
     this.overview = overview;
   }
 
-  public void setPrice(double price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 

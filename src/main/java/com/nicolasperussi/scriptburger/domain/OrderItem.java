@@ -1,6 +1,7 @@
 package com.nicolasperussi.scriptburger.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nicolasperussi.scriptburger.domain.pk.OrderItemPK;
@@ -16,7 +17,7 @@ public class OrderItem implements Serializable {
   private OrderItemPK id = new OrderItemPK();
 
   private Integer quantity;
-  private double totalPrice;
+  private BigDecimal totalPrice;
 
   public OrderItem() {
   }
@@ -25,7 +26,7 @@ public class OrderItem implements Serializable {
     setProduct(product);
     setOrder(order);
     this.quantity = quantity;
-    this.totalPrice = product.getPrice() * quantity;
+    this.totalPrice = product.getPrice().multiply(BigDecimal.valueOf(quantity));
   }
 
   @JsonIgnore
@@ -53,11 +54,11 @@ public class OrderItem implements Serializable {
     this.quantity = quantity;
   }
 
-  public double getTotalPrice() {
+  public BigDecimal getTotalPrice() {
     return totalPrice;
   }
 
-  public void setTotalPrice(double totalPrice) {
+  public void setTotalPrice(BigDecimal totalPrice) {
     this.totalPrice = totalPrice;
   }
 
