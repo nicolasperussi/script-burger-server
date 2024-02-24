@@ -69,6 +69,9 @@ public class OrderController {
     newOrder.setStatus(OrderStatus.WAITING);
     Client client = (Client) userService.findById(order.getUserId());
     newOrder.setClient(client);
+
+    newOrder.setDeliveryAddress(order.getAddress());
+
     service.create(newOrder);
 
     for (OrderItemDTO item : order.getItems()) {

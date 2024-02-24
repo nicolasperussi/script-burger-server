@@ -43,6 +43,9 @@ public class Order implements Serializable {
   @OneToMany(mappedBy = "id.order")
   private Set<OrderItem> items = new HashSet<>();
 
+  // Assign address to order
+  private Address deliveryAddress;
+
   public Order() {
   }
 
@@ -101,6 +104,14 @@ public class Order implements Serializable {
   public void addItem(OrderItem item) {
     item.setOrder(this);
     this.getItems().add(item);
+  }
+
+  public Address getDeliveryAddress() {
+    return deliveryAddress;
+  }
+
+  public void setDeliveryAddress(Address deliveryAddress) {
+    this.deliveryAddress = deliveryAddress;
   }
 
   public BigDecimal getTotalPrice() {
