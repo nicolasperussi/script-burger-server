@@ -16,7 +16,8 @@ public class Client extends User {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    public Client() {}
+    public Client() {
+    }
 
     public Client(String name, String email, String phone, String password) {
         super(name, email, phone, password);
@@ -30,6 +31,10 @@ public class Client extends User {
         this.getAddresses().add(address);
     }
 
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
     public List<Order> getOrders() {
         return orders;
     }
@@ -38,5 +43,4 @@ public class Client extends User {
         getOrders().add(order);
     }
 
-    
 }
