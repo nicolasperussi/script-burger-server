@@ -87,7 +87,6 @@ public class ProductController {
         Slugify.slugify(product.getName()), product.getOverview(), product.getPrice(), product.getCategory()));
 
     MultipartFile image = product.getImage();
-    System.out.println(image.getOriginalFilename());
     if (image != null && !image.isEmpty()) {
       // Convert the image to a BufferedImage
       BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
