@@ -85,6 +85,8 @@ public class OrderService {
     dto.setItems(order.getItems());
     dto.setMoment(order.getMoment());
     dto.setStatus(order.getStatus().getCode());
+    dto.setDeliveryAddress(order.getDeliveryAddress());
+    dto.setCourier(order.getCourier());
 
     return dto;
   }
