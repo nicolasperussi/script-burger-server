@@ -31,6 +31,4 @@ public class OrderDTO {
     this.address = address;
   }
 
-  
-
 }
