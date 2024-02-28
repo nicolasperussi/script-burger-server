@@ -32,6 +32,7 @@ public class SecurityConfigurations {
             .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/scriptburger-ws/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
             .requestMatchers(toH2Console()).permitAll()
             .anyRequest().authenticated())

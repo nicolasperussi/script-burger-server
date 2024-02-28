@@ -15,7 +15,7 @@ import jakarta.servlet.MultipartConfigElement;
 public class WebConfiguration implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(@NonNull CorsRegistry registry) {
-    registry.addMapping("/**").allowedOrigins("http://localhost:3001", "http://localhost:4200").allowedMethods("*");
+    registry.addMapping("/**").allowCredentials(true).allowedOrigins("http://localhost:3001", "http://localhost:4200").allowedMethods("*");
   }
 
   @Override

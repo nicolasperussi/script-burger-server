@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,9 @@ public class OrderController {
   private OrderService service;
 
   @Autowired
+  private SimpMessagingTemplate simpMessagingTemplate;
+
+  @Autowired
   private UserService userService;
   @Autowired
   private ProductService productService;
@@ -63,7 +67,7 @@ public class OrderController {
   }
 
   @PostMapping
-  public ResponseEntity<Void> create(@Valid @RequestBody OrderDTO order) {
+  public ResponseEntity<Order> create(@Valid @RequestBody OrderDTO order) {
     Order newOrder = new Order();
     newOrder.setMoment(Instant.now());
     newOrder.setStatus(OrderStatus.WAITING);
@@ -71,14 +75,18 @@ public class OrderController {
     newOrder.setClient(client);
 
     newOrder.setDeliveryAddress(order.getAddress());
-
+    
     service.create(newOrder);
 
     for (OrderItemDTO item : order.getItems()) {
       Product product = productService.findById(item.getProductId());
       OrderItem orderItem = new OrderItem(newOrder, product, item.getQuantity());
+      newOrder.addItem(orderItem);
       orderItemRepository.save(orderItem);
     }
+    
+
+    simpMessagingTemplate.convertAndSend("/topic/orders", newOrder);
 
     return ResponseEntity.status(201).build();
   }
