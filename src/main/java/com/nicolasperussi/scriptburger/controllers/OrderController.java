@@ -3,6 +3,11 @@ package com.nicolasperussi.scriptburger.controllers;
 import java.time.Instant;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,77 +37,110 @@ import com.nicolasperussi.scriptburger.services.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/orders")
+@RequestMapping(value = "/orders", produces = { "application/json" })
+@Tag(name = "Orders")
 public class OrderController {
-  @Autowired
-  private OrderService service;
+    @Autowired
+    private OrderService service;
 
-  @Autowired
-  private SimpMessagingTemplate simpMessagingTemplate;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
-  @Autowired
-  private UserService userService;
-  @Autowired
-  private ProductService productService;
-  @Autowired
-  private OrderItemRepository orderItemRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
-  @GetMapping
-  public ResponseEntity<List<Order>> findAll() {
-    List<Order> list = service.findAll();
-    if (list.isEmpty())
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @GetMapping
+    @Operation(summary = "Fetch all orders", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Orders were fetched."),
+            @ApiResponse(responseCode = "204", description = "No orders were found.", content = @Content)
+    })
+    public ResponseEntity<List<Order>> findAll() {
+        List<Order> list = service.findAll();
+        if (list.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-    return ResponseEntity.ok().body(list);
-  }
-
-  @GetMapping(value = "/user/{clientId}")
-  public ResponseEntity<List<OrderByUserDTO>> findByClientId(@NonNull @PathVariable Long clientId) {
-    List<OrderByUserDTO> orders = service.findByClientId(clientId);
-
-    if (orders.isEmpty())
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-    return ResponseEntity.ok().body(orders);
-  }
-
-  @PostMapping
-  public ResponseEntity<Order> create(@Valid @RequestBody OrderDTO order) {
-    Order newOrder = new Order();
-    newOrder.setMoment(Instant.now());
-    newOrder.setStatus(OrderStatus.WAITING);
-    Client client = (Client) userService.findById(order.getUserId());
-    newOrder.setClient(client);
-
-    newOrder.setDeliveryAddress(order.getAddress());
-    
-    service.create(newOrder);
-
-    for (OrderItemDTO item : order.getItems()) {
-      Product product = productService.findById(item.getProductId());
-      OrderItem orderItem = new OrderItem(newOrder, product, item.getQuantity());
-      newOrder.addItem(orderItem);
-      orderItemRepository.save(orderItem);
+        return ResponseEntity.ok().body(list);
     }
-    
 
-    simpMessagingTemplate.convertAndSend("/topic/orders", newOrder);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Order> findById(@NonNull @PathVariable Long id) {
+        Order order = service.findById(id);
 
-    return ResponseEntity.status(201).build();
-  }
+        return ResponseEntity.ok().body(order);
+    }
 
-  @PatchMapping(value = "/{orderId}")
-  public ResponseEntity<Order> nextOrderStep(@PathVariable Long orderId) {
-    return ResponseEntity.ok().body(service.nextOrderStatus(orderId));
-  }
+    @GetMapping(value = "/user/{clientId}")
+    @Operation(summary = "Fetch orders by user", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Orders were fetched based on provided user id."),
+            @ApiResponse(responseCode = "204", description = "No orders were found.", content = @Content)
+    })
+    public ResponseEntity<List<OrderByUserDTO>> findByClientId(@NonNull @PathVariable Long clientId) {
+        List<OrderByUserDTO> orders = service.findByClientId(clientId);
 
-  @PatchMapping(value = "/cancel/{orderId}")
-  public ResponseEntity<Order> cancel(@PathVariable Long orderId) {
-    return ResponseEntity.ok().body(service.cancelOrder(orderId));
-  }
+        if (orders.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-  @PatchMapping(value = "/{orderId}/courier/{courierId}")
-  public ResponseEntity<Order> assignCourier(@PathVariable Long orderId, @PathVariable Long courierId) {
-    return ResponseEntity.ok().body(service.assignCourier(orderId, courierId));
-  }
+        return ResponseEntity.ok().body(orders);
+    }
+
+    @PostMapping
+    @Operation(summary = "Create a new order", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order successfully created."),
+    })
+    public ResponseEntity<Order> create(@Valid @RequestBody OrderDTO order) {
+        Order newOrder = new Order();
+        newOrder.setMoment(Instant.now());
+        newOrder.setStatus(OrderStatus.WAITING);
+        Client client = (Client) userService.findById(order.getUserId());
+        newOrder.setClient(client);
+
+        newOrder.setDeliveryAddress(order.getAddress());
+
+        service.create(newOrder);
+
+        for (OrderItemDTO item : order.getItems()) {
+            Product product = productService.findById(item.getProductId());
+            OrderItem orderItem = new OrderItem(newOrder, product, item.getQuantity());
+            newOrder.addItem(orderItem);
+            orderItemRepository.save(orderItem);
+        }
+
+        simpMessagingTemplate.convertAndSend("/topic/orders", newOrder);
+
+        return ResponseEntity.status(201).build();
+    }
+
+    @PatchMapping(value = "/{orderId}")
+    @Operation(summary = "Advance order step", method = "PATCH")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order advanced to next step.", content = @Content),
+    })
+    public ResponseEntity<Order> nextOrderStep(@PathVariable Long orderId) {
+        return ResponseEntity.ok().body(service.nextOrderStatus(orderId));
+    }
+
+    @PatchMapping(value = "/cancel/{orderId}")
+    @Operation(summary = "Cancel order", method = "PATCH")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order canceled successfully.", content = @Content),
+    })
+    public ResponseEntity<Order> cancel(@PathVariable Long orderId) {
+        return ResponseEntity.ok().body(service.cancelOrder(orderId));
+    }
+
+    @PatchMapping(value = "/{orderId}/courier/{courierId}")
+    @Operation(summary = "Assign a courier to order", method = "PATCH")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Courier assigned successfully.", content = @Content),
+    })
+    public ResponseEntity<Order> assignCourier(@PathVariable Long orderId, @PathVariable Long courierId) {
+        return ResponseEntity.ok().body(service.assignCourier(orderId, courierId));
+    }
 }

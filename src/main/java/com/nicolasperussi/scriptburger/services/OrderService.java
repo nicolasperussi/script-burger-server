@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.nicolasperussi.scriptburger.domain.Courier;
@@ -22,7 +23,8 @@ public class OrderService {
   private UserService userService;
 
   public List<Order> findAll() {
-    return repository.findAll();
+    Sort sort = Sort.by(Sort.Direction.DESC, "moment");
+    return repository.findAll(sort);
   }
 
   public Order findById(Long id) {

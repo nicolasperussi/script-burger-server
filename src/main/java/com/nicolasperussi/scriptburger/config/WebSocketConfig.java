@@ -18,7 +18,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/scriptburger-ws")
-                .setAllowedOriginPatterns("http://localhost:3001", "http://localhost:4200")
+                .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 }

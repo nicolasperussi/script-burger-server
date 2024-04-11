@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.nicolasperussi.scriptburger.domain.Courier;
 import com.nicolasperussi.scriptburger.domain.User;
 import com.nicolasperussi.scriptburger.exceptions.ResourceNotFoundException;
 import com.nicolasperussi.scriptburger.repositories.UserRepository;
@@ -17,6 +18,10 @@ public class UserService {
 
   public List<User> findAll() {
     return repository.findAll();
+  }
+
+  public List<Courier> findAllCouriers() {
+    return repository.findAllCouriers();
   }
 
   public User findById(@NonNull Long id) {

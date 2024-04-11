@@ -20,35 +20,35 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @EnableWebSecurity
 public class SecurityConfigurations {
 
-  @Autowired
-  SecurityFilter securityFilter;
+    @Autowired
+    SecurityFilter securityFilter;
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity
-        .csrf(csrf -> csrf.disable())
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/scriptburger-ws/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
-            .requestMatchers(toH2Console()).permitAll()
-            .anyRequest().authenticated())
-        .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
-        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-        .build();
-  }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/**", "/images/**", "/scriptburger-ws/**",
+                                "/swagger-ui/**", "/v3/api-docs/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(toH2Console()).permitAll()
+                        .anyRequest().authenticated())
+                .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-      throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
