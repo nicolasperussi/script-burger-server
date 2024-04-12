@@ -33,7 +33,9 @@ public class OrderService {
   }
 
   public List<OrderByUserDTO> findByClientId(Long clientId) {
-    List<Order> orders = repository.findByClientId(clientId);
+    Sort sort = Sort.by(Sort.Direction.DESC, "moment");
+
+    List<Order> orders = repository.findByClientId(clientId, sort);
     return orders.stream().map(this::convertToOrderByUserDTO).collect(Collectors.toList());
   }
 
