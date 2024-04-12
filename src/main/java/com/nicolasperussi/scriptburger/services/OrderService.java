@@ -81,7 +81,7 @@ public class OrderService {
     return order;
   }
 
-  private OrderByUserDTO convertToOrderByUserDTO(Order order) {
+  public OrderByUserDTO convertToOrderByUserDTO(Order order) {
     OrderByUserDTO dto = new OrderByUserDTO();
     dto.setId(order.getId());
     dto.setItems(order.getItems());

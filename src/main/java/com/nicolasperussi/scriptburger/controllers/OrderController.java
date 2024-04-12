@@ -94,7 +94,7 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order successfully created."),
     })
-    public ResponseEntity<Order> create(@Valid @RequestBody OrderDTO order) {
+    public ResponseEntity<OrderByUserDTO> create(@Valid @RequestBody OrderDTO order) {
         Order newOrder = new Order();
         newOrder.setMoment(Instant.now());
         newOrder.setStatus(OrderStatus.WAITING);
@@ -114,7 +114,7 @@ public class OrderController {
 
         simpMessagingTemplate.convertAndSend("/topic/orders", newOrder);
 
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.created(null).body(service.convertToOrderByUserDTO(newOrder));
     }
 
     @PatchMapping(value = "/{orderId}")
