@@ -123,7 +123,9 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Order advanced to next step.", content = @Content),
     })
     public ResponseEntity<Order> nextOrderStep(@PathVariable Long orderId) {
-        return ResponseEntity.ok().body(service.nextOrderStatus(orderId));
+        Order order = service.nextOrderStatus(orderId);
+        simpMessagingTemplate.convertAndSend("/topic/orders/" + order.getClient().getId(), order);
+        return ResponseEntity.ok().body(order);
     }
 
     @PatchMapping(value = "/cancel/{orderId}")
@@ -132,7 +134,9 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Order canceled successfully.", content = @Content),
     })
     public ResponseEntity<Order> cancel(@PathVariable Long orderId) {
-        return ResponseEntity.ok().body(service.cancelOrder(orderId));
+        Order order = service.cancelOrder(orderId);
+        simpMessagingTemplate.convertAndSend("/topic/orders/" + order.getClient().getId(), order);
+        return ResponseEntity.ok().body(order);
     }
 
     @PatchMapping(value = "/{orderId}/courier/{courierId}")
