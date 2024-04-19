@@ -175,6 +175,13 @@
     "category": "DRINK"
   },
   {
+    "name": "Pink Lemonade",
+    "description": "Uma bebida refrescante e deliciosa feita a partir de limões frescos e um toque de frutas vermelhas, dando-lhe a cor rosa característica. A Pink Lemonade é uma opção refrescante para os dias quentes de verão, perfeita para saborear sozinho(a) ou acompanhado(a) de amigos e família.",
+    "overview": "Refrescante e frutada",
+    "price": 13.9,
+    "category": "DRINK"
+  },
+  {
     "name": "Água Mineral",
     "description": "Água mineral natural sem gás, é uma ótima escolha para manter-se hidratado e saudável. Rica em minerais e nutrientes essenciais, esta água é perfeita para acompanhar suas refeições ou simplesmente para refrescar-se em dias quentes.",
     "overview": "Hidratação saudável",
